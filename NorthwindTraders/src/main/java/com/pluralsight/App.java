@@ -24,7 +24,7 @@ public class App {
 //            Scanner input = new Scanner(System.in);
 //            System.out.println("Please enter your query into the Northwind database: ");
 //            String query = input.nextLine().trim();
-            String query = "SELECT productName FROM products";
+            String query = "SELECT productId, productName, unitPrice, unitsInStock FROM products";
 
             // Executes the query
             // This is like clicking the lightning bolt
@@ -32,9 +32,26 @@ public class App {
 
             // Process the results
             // This is a way to view the result set but java doesn't have a spreadsheet view for us
+//            while (results.next()) {
+//                String productId = results.getString("productId");
+//                String productName = results.getString("productName");
+//                double unitPrice = results.getDouble("unitPrice");
+//                String unitsInStock = results.getString("unitsInStock");
+//                System.out.println("✧".repeat(29));
+//                System.out.println("ID:         " + productId);
+//                System.out.println("Name:       " + productName);
+//                System.out.printf("Price:      $%.2f\n", unitPrice);
+//                System.out.println("Stock:      " + unitsInStock);
+//            }
+            // Doing both styles
+            System.out.println(" ID                Name                Price   Stock");
+            System.out.println("---- -------------------------------- ------- -------");
             while (results.next()) {
-                String product = results.getString("productName");
-                System.out.println(product);
+                String productId = results.getString("productId");
+                String productName = results.getString("productName");
+                double unitPrice = results.getDouble("unitPrice");
+                String unitsInStock = results.getString("unitsInStock");
+                System.out.printf("%-4s %-32s $%5.2f %6s\n", productId, productName, unitPrice, unitsInStock);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
