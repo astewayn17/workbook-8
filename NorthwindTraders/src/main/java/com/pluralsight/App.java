@@ -21,9 +21,6 @@ public class App {
 
             // This defines the query
             // Like typing the query in the new query window
-//            Scanner input = new Scanner(System.in);
-//            System.out.println("Please enter your query into the Northwind database: ");
-//            String query = input.nextLine().trim();
             String query = "SELECT productId, productName, unitPrice, unitsInStock FROM products";
 
             // Executes the query
