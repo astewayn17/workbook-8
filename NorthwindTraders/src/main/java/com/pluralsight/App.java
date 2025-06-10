@@ -1,6 +1,7 @@
 package com.pluralsight;
 
 import java.sql.*;
+import java.util.Scanner;
 
 public class App {
 
@@ -24,33 +25,32 @@ public class App {
         String username = args[0];
         String password = args[1];
 
+        // Asking user for their input
+        Scanner input = new Scanner(System.in);
+        System.out.print("""
+                What do you want to do?
+                  1) Display all products
+                  2) Display all customers
+                  0) Exit
+                Select an option: """);
+        System.out.print(" ");
+        int choice = input.nextInt();
+
         try {
             // Create the database connection and preparedStatement
             // This is like opening MySQL workbench and clicking localhost
             connection = DriverManager.getConnection( "jdbc:mysql://localhost:3306/northwind", username, password);
 
-            // Start the preparedStatement
-            // Like opening a new query window
-            preparedStatement = connection.prepareStatement(
-                    "SELECT productID, productName, unitPrice, unitsInStock FROM products"
-            );
+            if (choice == 1) {
+                // Start the preparedStatement
+                // Like opening a new query window
+                preparedStatement = connection.prepareStatement(
+                        "SELECT productID, productName, unitPrice, unitsInStock FROM products"
+                );
 
-///            // Find the question mark by index and provide its safe value
-///            preparedStatement.setInt(1, 14);
-
-            // Executes the query
-            // This is like clicking the lightning bolt
-            resultSet = preparedStatement.executeQuery();
-
-///            // Process the results
-///            // This is a way to view the result set but java doesn't have a spreadsheet view for us
-///            while (resultSet.next()) {
-///                // Process the data
-///                System.out.printf(
-///                        "productName = %s\n",
-///                        resultSet.getString("ProductName")
-///                );
-///            }
+                // Executes the query
+                // This is like clicking the lightning bolt
+                resultSet = preparedStatement.executeQuery();
 
 //            while (resultSet.next()) {
 //                String productId = resultSet.getString("productId");
@@ -63,16 +63,40 @@ public class App {
 //                System.out.printf("Price:      $%.2f\n", unitPrice);
 //                System.out.println("Stock:      " + unitsInStock);
 //            }
-            // Doing both styles
-            System.out.println(" ID                Name                Price   Stock");
-            System.out.println("---- -------------------------------- ------- -------");
-            while (resultSet.next()) {
-                String productId = resultSet.getString("productId");
-                String productName = resultSet.getString("productName");
-                double unitPrice = resultSet.getDouble("unitPrice");
-                String unitsInStock = resultSet.getString("unitsInStock");
-                System.out.printf("%-4s %-32s $%5.2f %6s\n", productId, productName, unitPrice, unitsInStock);
+                // Doing both styles
+                System.out.println(" ID                Name                Price   Stock");
+                System.out.println("---- -------------------------------- ------- -------");
+                while (resultSet.next()) {
+                    String productId = resultSet.getString("productId");
+                    String productName = resultSet.getString("productName");
+                    double unitPrice = resultSet.getDouble("unitPrice");
+                    String unitsInStock = resultSet.getString("unitsInStock");
+                    System.out.printf("%-4s %-32s $%5.2f %6s\n", productId, productName, unitPrice, unitsInStock);
+                }
+            } else if (choice == 2) {
+                preparedStatement = connection.prepareStatement(
+                        "SELECT ContactName, CompanyName, City, Country, Phone FROM customers ORDER BY country"
+                );
+
+                resultSet = preparedStatement.executeQuery();
+
+                System.out.println("Contact Name             Company Name                          City             Country       Phone");
+                System.out.println("------------             ------------                          ----             -------       -----");
+                while (resultSet.next()) {
+                    String contactName = resultSet.getString("ContactName");
+                    String companyName = resultSet.getString("CompanyName");
+                    String city = resultSet.getString("City");
+                    String country = resultSet.getString("Country");
+                    String phone = resultSet.getString("Phone");
+                    System.out.printf("%-24s %-37s %-16s %-13s %-15s%n", contactName, companyName, city, country, phone);
+                }
+
+            } else if (choice == 0) {
+                System.out.println("\nGoodbye!");
+            } else {
+                System.out.println("\nInvalid input! Goodbye.");
             }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -86,6 +110,20 @@ public class App {
 }
 
 ///=====================================================================================================================
+
+///            // Find the question mark by index and provide its safe value
+///            preparedStatement.setInt(1, 14);
+
+///            // Process the results
+///            // This is a way to view the result set but java doesn't have a spreadsheet view for us
+///            while (resultSet.next()) {
+///                // Process the data
+///                System.out.printf(
+///                        "productName = %s\n",
+///                        resultSet.getString("ProductName")
+///                );
+///            }
+
 //package com.pluralsight;
 //
 //import java.sql.*;
