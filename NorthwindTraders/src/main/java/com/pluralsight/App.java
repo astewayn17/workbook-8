@@ -9,51 +9,54 @@ public class App {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
+
+        // Making sure we passed in 2 arguments from the command line when we run the app
+        // This is done with the app configuration in intellij (page 45 of the wb)
+        if(args.length != 2) {
+            System.out.println(
+                    "Application needs two arguments to run: " +
+                            "java com.pluralsight.App <username> <password>"
+            );
+            System.exit(1);
+        }
+
+        // Get the username and password from the command line args
+        String username = args[0];
+        String password = args[1];
+
         try {
-
-            // Making sure we passed in 2 arguments from the command line when we run the app
-            // This is done with the app configuration in intellij (page 45 of the wb)
-            if(args.length != 2) {
-                System.out.println(
-                        "Application needs two arguments to run: " +
-                                "java com.pluralsight.UsingDriverManager <username> <password>"
-                );
-                System.exit(1);
-            }
-
-            // Get the username and password from the command line args
-            String username = args[0];
-            String password = args[1];
-
             // Create the database connection and preparedStatement
             // This is like opening MySQL workbench and clicking localhost
             connection = DriverManager.getConnection( "jdbc:mysql://localhost:3306/northwind", username, password);
 
             // Start the preparedStatement
             // Like opening a new query window
-            preparedStatement = connection.prepareStatement("SELECT ProductName FROM Products WHERE ProductID = ?");
+            preparedStatement = connection.prepareStatement(
+                    "SELECT productID, productName, unitPrice, unitsInStock FROM products"
+            );
 
-            // Find the question mark by index and provide its safe value
-            preparedStatement.setInt(1, 14);
+///            // Find the question mark by index and provide its safe value
+///            preparedStatement.setInt(1, 14);
 
             // Executes the query
             // This is like clicking the lightning bolt
             resultSet = preparedStatement.executeQuery();
 
-            // Process the results
-            // This is a way to view the result set but java doesn't have a spreadsheet view for us
-            while (resultSet.next()) {
-                // Process the data
-                System.out.printf(
-                        "productName = %s\n",
-                        resultSet.getString("ProductName")
-                );
-            }
-//            while (results.next()) {
-//                String productId = results.getString("productId");
-//                String productName = results.getString("productName");
-//                double unitPrice = results.getDouble("unitPrice");
-//                String unitsInStock = results.getString("unitsInStock");
+///            // Process the results
+///            // This is a way to view the result set but java doesn't have a spreadsheet view for us
+///            while (resultSet.next()) {
+///                // Process the data
+///                System.out.printf(
+///                        "productName = %s\n",
+///                        resultSet.getString("ProductName")
+///                );
+///            }
+
+//            while (resultSet.next()) {
+//                String productId = resultSet.getString("productId");
+//                String productName = resultSet.getString("productName");
+//                double unitPrice = resultSet.getDouble("unitPrice");
+//                String unitsInStock = resultSet.getString("unitsInStock");
 //                System.out.println("✧".repeat(29));
 //                System.out.println("ID:         " + productId);
 //                System.out.println("Name:       " + productName);
@@ -61,15 +64,15 @@ public class App {
 //                System.out.println("Stock:      " + unitsInStock);
 //            }
             // Doing both styles
-//            System.out.println(" ID                Name                Price   Stock");
-//            System.out.println("---- -------------------------------- ------- -------");
-//            while (results.next()) {
-//                String productId = results.getString("productId");
-//                String productName = results.getString("productName");
-//                double unitPrice = results.getDouble("unitPrice");
-//                String unitsInStock = results.getString("unitsInStock");
-//                System.out.printf("%-4s %-32s $%5.2f %6s\n", productId, productName, unitPrice, unitsInStock);
-//            }
+            System.out.println(" ID                Name                Price   Stock");
+            System.out.println("---- -------------------------------- ------- -------");
+            while (resultSet.next()) {
+                String productId = resultSet.getString("productId");
+                String productName = resultSet.getString("productName");
+                double unitPrice = resultSet.getDouble("unitPrice");
+                String unitsInStock = resultSet.getString("unitsInStock");
+                System.out.printf("%-4s %-32s $%5.2f %6s\n", productId, productName, unitPrice, unitsInStock);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -82,8 +85,7 @@ public class App {
     }
 }
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///=====================================================================================================================
 //package com.pluralsight;
 //
 //import java.sql.*;
