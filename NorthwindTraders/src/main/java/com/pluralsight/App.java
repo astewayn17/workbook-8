@@ -101,19 +101,18 @@ public class App {
                 Connection connection = DriverManager.getConnection( "jdbc:mysql://localhost:3306/northwind", username, password);
                 PreparedStatement preparedStatement = connection.prepareStatement(
                     "SELECT ProductID, ProductName, UnitPrice, UnitsInStock FROM products WHERE CategoryID = ?"
-                );
-
+                )
             ) {
                 preparedStatement.setInt(1, catId);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    System.out.println("\n ID                Name                Price   Stock");
-                    System.out.println("---- -------------------------------- ------- -------");
+                    System.out.println("\nProduct ID                Name                Price   Stock");
+                    System.out.println("----------- -------------------------------- -------- ------");
                     while (resultSet.next()) {
                         String productId = resultSet.getString("ProductID");
                         String productName = resultSet.getString("ProductName");
                         double unitPrice = resultSet.getDouble("UnitPrice");
                         String unitsInStock = resultSet.getString("UnitsInStock");
-                        System.out.printf("%-4s %-32s $%5.2f %6s\n", productId, productName, unitPrice, unitsInStock);
+                        System.out.printf("%-12s %-32s $%5.2f %6s\n", productId, productName, unitPrice, unitsInStock);
                     }
                 }
             } catch (SQLException e) { throw new RuntimeException(e); }
