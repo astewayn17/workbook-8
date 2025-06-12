@@ -30,7 +30,7 @@ public class App {
         dataSource.setUsername(username);
         dataSource.setPassword(password);
 
-        // Create DAO objects to interact with the database
+        // Create DAO (data access object) objects to interact with the database
         ActorDao dataManagerActor = new ActorDao(dataSource);
         FilmDao dataManagerFilm = new FilmDao(dataSource);
 
