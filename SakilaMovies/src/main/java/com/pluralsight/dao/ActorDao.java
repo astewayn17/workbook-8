@@ -27,9 +27,9 @@ public class ActorDao {
                         FROM 
                             actor 
                         WHERE 
-                            last_name = ?""")
+                            last_name LIKE ?""")
         ) {
-            preparedStatement.setString(1, lastName);
+            preparedStatement.setString(1, "%" + lastName + "%");
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 boolean found = false;
